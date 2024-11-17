@@ -70,6 +70,11 @@ void formatMacAddress(const uint8_t *macAddr, char *buffer, int maxLength)
   snprintf(buffer, maxLength, "%02x:%02x:%02x:%02x:%02x:%02x", macAddr[0], macAddr[1], macAddr[2], macAddr[3], macAddr[4], macAddr[5]);
 }
 
+void startExpireTimer() {
+  timerStop(askExpireTimer);
+  timerWrite(askExpireTimer, 0);
+  timerStart(askExpireTimer);
+}
 
 void receiveCallback(const esp_now_recv_info_t *macAddr, const uint8_t *data, int dataLen)
 /* Called when data is received
@@ -109,10 +114,10 @@ void receiveCallback(const esp_now_recv_info_t *macAddr, const uint8_t *data, in
     recvd.remove(0, 3);
     cmdRecvd = recvd;
     redrawCmdRecvd = true;
-    timerStart(askExpireTimer);  //once you get an ask, a timer starts
+    startExpireTimer();
   } else if (recvd[0] == 'D' && recvd.substring(3) == cmdRecvd) {
-    timerWrite(askExpireTimer, 0);
     timerStop(askExpireTimer);
+    timerWrite(askExpireTimer, 0);
     flashGreenBorder = true;
     delay(1000);
     flashGreenBorder = false;
@@ -230,12 +235,14 @@ void timerSetup() {
   askRequestTimer = timerBegin(1000000); // 1MHz
   timerAttachInterrupt(askRequestTimer, &onAskReqTimer);
   timerAlarm(askRequestTimer, 5 * 1000000, true, 0);  //send out an ask every 5 secs
+  timerStart(askRequestTimer);
 
-  askExpireTimer = timerBegin(80000000);
+  askExpireTimer = timerBegin(1000000);
   timerAttachInterrupt(askExpireTimer, &onAskExpireTimer);
   timerAlarm(askExpireTimer, expireLength * 1000000, true, 0);
-  timerStop(askExpireTimer);
+  timerStart(askExpireTimer);
 }
+
 void setup() {
   Serial.begin(115200);
 
@@ -256,9 +263,9 @@ void drawControls() {
 
   cmd1 = genCommand();
   cmd2 = genCommand();
-  cmd3 = genCommand();
   cmd1.indexOf(' ');
   
+  cmd3 = genCommand();
   cmd3 = "Toggle " + cmd3.substring(cmd3.indexOf(' ') + 1);
   tft.setTextSize(1);
   tft.drawString("B1: " + cmd1.substring(0, cmd1.indexOf(' ')), 3, 90, 2);
@@ -322,11 +329,18 @@ void loop() {
     tft.fillRect(16, lineHeight * 2 + 14 + 1, progressWidth, 4, TFT_RED);
 
     debugTimer();
+    Serial.println(progressWidth);
 
-    if (progressWidth < 49) {
-      flashRedBorder = true;
+    if (progressWidth < 49.0) {
+      drawBorder(TFT_RED);
+      drawBorder(TFT_BLACK);
     } else {
-      flashRedBorder = false;
+      drawBorder(TFT_BLACK);
+    }
+
+    if (progressWidth <= 1) {
+      timerSetup();
+      progress = progress - 1;
     }
 
     lastRedrawTime = millis();
