@@ -256,17 +256,17 @@ void drawControls() {
 
   cmd1 = genCommand();
   cmd2 = genCommand();
+  cmd3 = genCommand();
   cmd1.indexOf(' ');
   
-  cmd3 = genCommand();
   cmd3 = "Toggle " + cmd3.substring(cmd3.indexOf(' ') + 1);
   tft.setTextSize(1);
-  tft.drawString("B1: " + cmd1.substring(0, cmd1.indexOf(' ')), 0, 90, 2);
-  tft.drawString(cmd1.substring(cmd1.indexOf(' ') + 1), 0, 90 + lineHeight, 2);
-  tft.drawString("B2: " + cmd2.substring(0, cmd2.indexOf(' ')), 0, 140, 2);
-  tft.drawString(cmd2.substring(cmd2.indexOf(' ') + 1), 0, 140 + lineHeight, 2);
-  tft.drawString("S: " + cmd3.substring(0, cmd3.indexOf(' ')), 0, 190, 2);
-  tft.drawString(cmd3.substring(cmd3.indexOf(' ') + 1), 0, 190 + lineHeight, 2);
+  tft.drawString("B1: " + cmd1.substring(0, cmd1.indexOf(' ')), 3, 90, 2);
+  tft.drawString(cmd1.substring(cmd1.indexOf(' ') + 1), 3, 90 + lineHeight, 2);
+  tft.drawString("B2: " + cmd2.substring(0, cmd2.indexOf(' ')), 3, 140, 2);
+  tft.drawString(cmd2.substring(cmd2.indexOf(' ') + 1), 3, 140 + lineHeight, 2);
+  tft.drawString("S: " + cmd3.substring(0, cmd3.indexOf(' ')), 3, 190, 2);
+  tft.drawString(cmd3.substring(cmd3.indexOf(' ') + 1), 3, 190 + lineHeight, 2);
 }
 
 void debugTimer() {
