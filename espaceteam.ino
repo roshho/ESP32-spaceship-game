@@ -28,6 +28,13 @@ int progress = 0;
 bool redrawProgress = true;
 int lastRedrawTime = 0;
 
+// border variables
+bool flashGreenBorder = false;
+bool flashRedBorder = false;
+unsigned long lastFlashTime = 0;
+bool borderState = false;
+const int flashInterval = 250;
+
 //we could also use xSemaphoreGiveFromISR and its associated fxns, but this is fine
 volatile bool scheduleCmdAsk = true;
 hw_timer_t *askRequestTimer = NULL;
@@ -46,6 +53,12 @@ int lineHeight = 30;
 #define BUTTON_LEFT 0
 #define BUTTON_RIGHT 35
 
+
+// border fns
+void drawBorder(uint16_t color) {
+  tft.drawRect(0, 0, tft.width(), tft.height(), color);
+  tft.drawRect(1, 1, tft.width()-2, tft.height()-2, color);
+}
 
 void formatMacAddress(const uint8_t *macAddr, char *buffer, int maxLength)
 // Formats MAC Address
@@ -96,6 +109,9 @@ void receiveCallback(const esp_now_recv_info_t *macAddr, const uint8_t *data, in
   } else if (recvd[0] == 'D' && recvd.substring(3) == cmdRecvd) {
     timerWrite(askExpireTimer, 0);
     timerStop(askExpireTimer);
+    flashGreenBorder = true;
+    delay(1000);
+    flashGreenBorder = false;
     cmdRecvd = waitingCmd;
     progress = progress + 1;
     broadcast("P: " + String(progress));
@@ -229,10 +245,21 @@ void drawControls() {
   cmd1 = genCommand();
   cmd2 = genCommand();
   cmd1.indexOf(' ');
-  tft.drawString("B1: " + cmd1.substring(0, cmd1.indexOf(' ')), 0, 90, 2);
-  tft.drawString(cmd1.substring(cmd1.indexOf(' ') + 1), 0, 90 + lineHeight, 2);
-  tft.drawString("B2: " + cmd2.substring(0, cmd2.indexOf(' ')), 0, 170, 2);
-  tft.drawString(cmd2.substring(cmd2.indexOf(' ') + 1), 0, 170 + lineHeight, 2);
+  tft.setTextSize(1);
+  tft.drawString("B1: " + cmd1.substring(0, cmd1.indexOf(' ')), 3, 90, 2);
+  tft.setTextSize(1);
+  tft.drawString(cmd1.substring(cmd1.indexOf(' ') + 1), 3, 90 + lineHeight, 2);
+  tft.setTextSize(1);
+  tft.drawString("B2: " + cmd2.substring(0, cmd2.indexOf(' ')), 3, 170, 2);
+  tft.setTextSize(1);
+  tft.drawString(cmd2.substring(cmd2.indexOf(' ') + 1), 3, 170 + lineHeight, 2);
+}
+
+void debugTimer() {
+  Serial.print("timer read (us):");
+  Serial.println(timerRead(askExpireTimer));
+  Serial.print("reaminaing time:");
+  Serial.println((expireLength * 1000000.0 - timerRead(askExpireTimer)) / 1000000.0);
 }
 
 void loop() {
@@ -259,6 +286,33 @@ void loop() {
     askExpired = false;
   }
 
+  if (flashGreenBorder && millis() - lastFlashTime > flashInterval) {
+    borderState = !borderState;
+    if (borderState) {
+      drawBorder(TFT_GREEN);
+    } else {
+      drawBorder(TFT_BLACK);
+    }
+    lastFlashTime = millis();
+  }
+
+  // progress logic
+  if ((millis() - lastRedrawTime) > 50) {
+    tft.fillRect(15, lineHeight * 2 + 14, 100, 6, TFT_GREEN);
+    float progressWidth = (((expireLength * 1000000.0) - timerRead(askExpireTimer)) / (expireLength * 1000000.0)) * 98;
+    tft.fillRect(16, lineHeight * 2 + 14 + 1, progressWidth, 4, TFT_RED);
+
+    debugTimer();
+
+    if (progressWidth < 49) {
+      flashRedBorder = true;
+    } else {
+      flashRedBorder = false;
+    }
+
+    lastRedrawTime = millis();
+  }
+
   if ((millis() - lastRedrawTime) > 50) {
     tft.fillRect(15, lineHeight * 2 + 14, 100, 6, TFT_GREEN);
     tft.fillRect(16, lineHeight * 2 + 14 + 1, (((expireLength * 1000000.0) - timerRead(askExpireTimer)) / (expireLength * 1000000.0)) * 98, 4, TFT_RED);
@@ -267,8 +321,8 @@ void loop() {
 
   if (redrawCmdRecvd || redrawProgress) {
     tft.fillRect(0, 0, 135, 90, TFT_BLACK);
-    tft.drawString(cmdRecvd.substring(0, cmdRecvd.indexOf(' ')), 0, 0, 2);
-    tft.drawString(cmdRecvd.substring(cmdRecvd.indexOf(' ') + 1), 0, 0 + lineHeight, 2);
+    tft.drawString(cmdRecvd.substring(0, cmdRecvd.indexOf(' ')), 3, 0, 2);
+    tft.drawString(cmdRecvd.substring(cmdRecvd.indexOf(' ') + 1), 3, 0 + lineHeight, 2);
     redrawCmdRecvd = false;
 
     if (progress >= 100) {
