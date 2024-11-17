@@ -16,8 +16,10 @@ TFT_eSPI tft = TFT_eSPI();  // Invoke library, pins defined in User_Setup.h
 
 String cmd1 = "";
 String cmd2 = "";
+String cmd3 = "";
 volatile bool scheduleCmd1Send = false;
 volatile bool scheduleCmd2Send = false;
+volatile bool scheduleCmd3Send = false;
 
 String cmdRecvd = "";
 const String waitingCmd = "Wait for cmds";
@@ -40,11 +42,13 @@ const String commandVerbs[ARRAY_SIZE] = { "Buzz", "Engage", "Floop", "Bother", "
 const String commandNounsFirst[ARRAY_SIZE] = { "foo", "dev", "bobby", "jaw", "tooty", "wu", "fizz", "rot", "tea", "bee" };
 const String commandNounsSecond[ARRAY_SIZE] = { "bars", "ices", "pins", "nobs", "zops", "tangs", "bells", "wels", "pops", "bops" };
 
-int lineHeight = 30;
+int lineHeight = 20;
 
 // Define LED and pushbutton pins
-#define BUTTON_LEFT 0
-#define BUTTON_RIGHT 35
+#define BUTTON1_PIN 25
+#define BUTTON2_PIN 13
+#define SWITCH_PIN1 15
+#define SWITCH_PIN2 2
 
 
 void formatMacAddress(const uint8_t *macAddr, char *buffer, int maxLength)
@@ -130,6 +134,8 @@ void broadcast(const String &message)
     esp_now_add_peer(&peerInfo);
   }
   // Send message
+  Serial.print("Sent message: ");
+  Serial.println(message);
   esp_err_t result = esp_now_send(broadcastAddress, (const uint8_t *)message.c_str(), message.length());
 }
 
@@ -139,6 +145,10 @@ void IRAM_ATTR sendCmd1() {
 
 void IRAM_ATTR sendCmd2() {
   scheduleCmd2Send = true;
+}
+
+void IRAM_ATTR sendCmd3() {
+  scheduleCmd3Send = true;
 }
 
 void IRAM_ATTR onAskReqTimer() {
@@ -177,11 +187,13 @@ void espnowSetup() {
 }
 
 void buttonSetup() {
-  pinMode(BUTTON_LEFT, INPUT);
-  pinMode(BUTTON_RIGHT, INPUT);
+  pinMode(BUTTON1_PIN, INPUT_PULLUP);
+  pinMode(BUTTON2_PIN, INPUT_PULLUP);
+  pinMode(SWITCH_PIN1, INPUT_PULLUP);
 
-  attachInterrupt(digitalPinToInterrupt(BUTTON_LEFT), sendCmd1, FALLING);
-  attachInterrupt(digitalPinToInterrupt(BUTTON_RIGHT), sendCmd2, FALLING);
+  attachInterrupt(digitalPinToInterrupt(BUTTON1_PIN), sendCmd1, FALLING);
+  attachInterrupt(digitalPinToInterrupt(BUTTON2_PIN), sendCmd2, FALLING);
+  attachInterrupt(digitalPinToInterrupt(SWITCH_PIN1), sendCmd3, CHANGE);
 }
 
 void textSetup() {
@@ -228,11 +240,15 @@ void drawControls() {
 
   cmd1 = genCommand();
   cmd2 = genCommand();
-  cmd1.indexOf(' ');
+  cmd3 = genCommand();
+  cmd3 = "Toggle " + cmd3.substring(cmd3.indexOf(' ') + 1);
+  tft.setTextSize(1);
   tft.drawString("B1: " + cmd1.substring(0, cmd1.indexOf(' ')), 0, 90, 2);
   tft.drawString(cmd1.substring(cmd1.indexOf(' ') + 1), 0, 90 + lineHeight, 2);
-  tft.drawString("B2: " + cmd2.substring(0, cmd2.indexOf(' ')), 0, 170, 2);
-  tft.drawString(cmd2.substring(cmd2.indexOf(' ') + 1), 0, 170 + lineHeight, 2);
+  tft.drawString("B2: " + cmd2.substring(0, cmd2.indexOf(' ')), 0, 140, 2);
+  tft.drawString(cmd2.substring(cmd2.indexOf(' ') + 1), 0, 140 + lineHeight, 2);
+  tft.drawString("S: " + cmd3.substring(0, cmd3.indexOf(' ')), 0, 190, 2);
+  tft.drawString(cmd3.substring(cmd3.indexOf(' ') + 1), 0, 190 + lineHeight, 2);
 }
 
 void loop() {
@@ -245,8 +261,13 @@ void loop() {
     broadcast("D: " + cmd2);
     scheduleCmd2Send = false;
   }
+  if (scheduleCmd3Send) {
+    broadcast("D: " + cmd3);
+    scheduleCmd3Send = false;
+  }
   if (scheduleCmdAsk) {
-    String cmdAsk = random(2) ? cmd1 : cmd2;
+    String cmdList[] = {cmd1, cmd2, cmd3};
+    String cmdAsk = cmdList[(int)random(3)];
     broadcast("A: " + cmdAsk);
     scheduleCmdAsk = false;
   }
