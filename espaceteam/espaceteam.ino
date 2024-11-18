@@ -45,9 +45,9 @@ hw_timer_t *askExpireTimer = NULL;
 int expireLength = 25;
 
 #define ARRAY_SIZE 10
-const String commandVerbs[ARRAY_SIZE] = { "Buzz", "Engage", "Floop", "Bother", "Twist", "Jingle", "Jangle", "Yank", "Press", "Play" };
-const String commandNounsFirst[ARRAY_SIZE] = { "foo", "dev", "bobby", "jaw", "tooty", "wu", "fizz", "rot", "tea", "bee" };
-const String commandNounsSecond[ARRAY_SIZE] = { "bars", "ices", "pins", "nobs", "zops", "tangs", "bells", "wels", "pops", "bops" };
+const String commandVerbs[ARRAY_SIZE] = {"Engage", "Jingle", "Press", "Play" };
+const String commandNounsFirst[ARRAY_SIZE] = {"Portal", "Flopper", "Blink", "Spot"};
+const String commandNounsSecond[ARRAY_SIZE] = {"pins", "nobs", "bells", "pops"};
 
 int lineHeight = 20;
 
@@ -56,6 +56,7 @@ int lineHeight = 20;
 #define BUTTON2_PIN 13
 #define SWITCH_PIN1 15
 #define SWITCH_PIN2 2
+#define BACKLIGHT_PIN 32
 
 
 // border fns
@@ -248,6 +249,9 @@ void setup() {
   buttonSetup();
   espnowSetup();
   timerSetup();
+
+  pinMode(BACKLIGHT_PIN, OUTPUT);  // Set the backlight pin as an output
+  analogWrite(BACKLIGHT_PIN, 255);
 }
 
 String genCommand() {
@@ -308,6 +312,17 @@ void loop() {
     cmdRecvd = waitingCmd;
     redrawCmdRecvd = true;
     askExpired = false;
+
+    // End game if progress reaches 0
+    if (progress == 0) {
+        tft.fillScreen(TFT_RED);
+        tft.setTextSize(3);
+        tft.setTextColor(TFT_WHITE, TFT_RED);
+        tft.drawString("GAME", 35, 50, 1);
+        tft.drawString("OVER", 35, 100, 1);
+        delay(5000); // Display the game-over screen for 5 seconds
+        ESP.restart(); // Restart the device or handle any other end-game logic
+    }
   }
 
   if (flashGreenBorder && millis() - lastFlashTime > flashInterval) {
@@ -329,23 +344,25 @@ void loop() {
     debugTimer();
     Serial.println(progressWidth);
 
-    if (progressWidth < 49.0) {
+    if (progressWidth < 49.0 && progressWidth > 25.0 ) {
+      analogWrite(BACKLIGHT_PIN, 128); // decrease brightness to 1/2
       drawBorder(TFT_RED);
       drawBorder(TFT_BLACK);
+    } else if (progressWidth < 24.9 && progressWidth >= 0) {
+      analogWrite(BACKLIGHT_PIN, 64); // decrease brightness to 1/4
+      drawBorder(TFT_RED);
+      drawBorder(TFT_BLACK);
+  
+      for (int i = 0; i < 50; i++) { 
+        int x = random(tft.width());
+        int y = random(tft.height());
+        tft.drawPixel(x, y, TFT_RED); // Draw a black dot
+      }
     } else {
+      analogWrite(BACKLIGHT_PIN, 255); // brightness back to default
       drawBorder(TFT_BLACK);
     }
 
-    if (progressWidth <= 0.5) {
-      progress = progress - 1;
-    }
-
-    lastRedrawTime = millis();
-  }
-
-  if ((millis() - lastRedrawTime) > 50) {
-    tft.fillRect(15, lineHeight * 2 + 14, 100, 6, TFT_GREEN);
-    tft.fillRect(16, lineHeight * 2 + 14 + 1, (((expireLength * 1000000.0) - timerRead(askExpireTimer)) / (expireLength * 1000000.0)) * 98, 4, TFT_RED);
     lastRedrawTime = millis();
   }
 
