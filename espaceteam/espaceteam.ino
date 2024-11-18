@@ -313,6 +313,7 @@ void loop() {
     redrawCmdRecvd = true;
     askExpired = false;
 
+
     // End game if progress reaches 0
     if (progress == 0) {
         tft.fillScreen(TFT_RED);
@@ -362,6 +363,17 @@ void loop() {
       analogWrite(BACKLIGHT_PIN, 255); // brightness back to default
       drawBorder(TFT_BLACK);
     }
+
+    if (progressWidth <= 0.5) {
+      progress = progress - 1;
+    }
+
+    lastRedrawTime = millis();
+  }
+
+  if ((millis() - lastRedrawTime) > 50) {
+    tft.fillRect(15, lineHeight * 2 + 14, 100, 6, TFT_GREEN);
+    tft.fillRect(16, lineHeight * 2 + 14 + 1, (((expireLength * 1000000.0) - timerRead(askExpireTimer)) / (expireLength * 1000000.0)) * 98, 4, TFT_RED);
 
     lastRedrawTime = millis();
   }
