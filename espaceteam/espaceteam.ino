@@ -178,8 +178,6 @@ void IRAM_ATTR onAskReqTimer() {
 
 void IRAM_ATTR onAskExpireTimer() {
   askExpired = true;
-  timerStop(askExpireTimer);
-  timerWrite(askExpireTimer, 0);
 }
 
 void espnowSetup() {
@@ -338,8 +336,7 @@ void loop() {
       drawBorder(TFT_BLACK);
     }
 
-    if (progressWidth <= 1) {
-      timerSetup();
+    if (progressWidth <= 0.5) {
       progress = progress - 1;
     }
 
