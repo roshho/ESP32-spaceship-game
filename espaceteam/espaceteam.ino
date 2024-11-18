@@ -51,6 +51,12 @@ const String commandNounsSecond[ARRAY_SIZE] = {"pins", "nobs", "bells", "pops"};
 
 int lineHeight = 20;
 
+const int obstructionThresholdOne = 10;
+const int obstructionThresholdTwo = 5;
+bool obstructionActive = false; 
+
+
+
 // Define LED and pushbutton pins
 #define BUTTON1_PIN 25
 #define BUTTON2_PIN 13
@@ -242,6 +248,28 @@ void timerSetup() {
   timerStart(askExpireTimer);
 }
 
+void drawScreenObstructionOne() {
+  for (int i = 0; i < 20; i++) { 
+        int x = random(tft.width());
+        int y = random(tft.height());
+        tft.drawPixel(x, y, TFT_BLUE); 
+    }
+}
+void drawScreenObstructionTwo() {
+  for (int i = 0; i < 25; i++) { 
+        int x = random(tft.width());
+        int y = random(tft.height());
+        tft.drawPixel(x, y, TFT_BLUE); 
+    }
+  for (int i = 0; i < 7; i++) { 
+        int x1 = random(tft.width());
+        int y1 = random(tft.height());
+        int x2 = random(tft.width());
+        int y2 = random(tft.height());
+        tft.drawLine(x1, y1, x2, y2, TFT_YELLOW); 
+    }
+}
+
 void setup() {
   Serial.begin(115200);
 
@@ -325,6 +353,15 @@ void loop() {
         ESP.restart(); // Restart the device or handle any other end-game logic
     }
   }
+  //as timer runs out, add obstruction
+  float remainingTime = (expireLength * 1000000.0 - timerRead(askExpireTimer)) / 1000000.0;
+  if (remainingTime < obstructionThresholdTwo && !obstructionActive) {
+    drawScreenObstructionTwo();
+    obstructionActive = true;
+  } else if (remainingTime < obstructionThresholdOne && !obstructionActive) {
+    drawScreenObstructionOne();
+    obstructionActive = true;
+  }
 
   if (flashGreenBorder && millis() - lastFlashTime > flashInterval) {
     borderState = !borderState;
@@ -379,6 +416,12 @@ void loop() {
   }
 
   if (redrawCmdRecvd || redrawProgress) {
+    // clearing obstruction when task is completed
+    if (obstructionActive) {
+      tft.fillRect(0, 0, tft.width(), tft.height(), TFT_BLACK); 
+      obstructionActive = false;
+    }
+
     tft.fillRect(0, 0, 135, 90, TFT_BLACK);
     tft.drawString(cmdRecvd.substring(0, cmdRecvd.indexOf(' ')), 3, 0, 2);
     tft.drawString(cmdRecvd.substring(cmdRecvd.indexOf(' ') + 1), 3, 0 + lineHeight, 2);
