@@ -42,7 +42,7 @@ volatile bool scheduleCmdAsk = true;
 hw_timer_t *askRequestTimer = NULL;
 volatile bool askExpired = false;
 hw_timer_t *askExpireTimer = NULL;
-int expireLength = 60;
+int expireLength = 35;
 
 #define ARRAY_SIZE 10
 const String commandVerbs[ARRAY_SIZE] = {"Engage", "Jingle", "Press", "Play", "Tickle", "Randomize", "Flourish", "Jumpstart", "Pivot", "Tinker" };
