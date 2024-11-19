@@ -44,7 +44,7 @@ volatile bool askExpired = false;
 hw_timer_t *askExpireTimer = NULL;
 int expireLength = 25;
 
-#define ARRAY_SIZE 10
+#define ARRAY_SIZE 4
 const String commandVerbs[ARRAY_SIZE] = {"Engage", "Jingle", "Press", "Play" };
 const String commandNounsFirst[ARRAY_SIZE] = {"Portal", "Flopper", "Blink", "Spot"};
 const String commandNounsSecond[ARRAY_SIZE] = {"pins", "nobs", "bells", "pops"};
@@ -228,7 +228,7 @@ void textSetup() {
 
   tft.setTextSize(2);
   tft.fillScreen(TFT_BLACK);
-  tft.setTextColor(TFT_GREEN, TFT_BLACK);
+  tft.setTextColor(TFT_YELLOW, TFT_BLACK);
   drawControls();
 
   cmdRecvd = waitingCmd;
