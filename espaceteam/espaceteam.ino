@@ -249,7 +249,7 @@ void timerSetup() {
 }
 
 void drawScreenObstructionOne() {
-  for (int i = 0; i < 80; i++) { 
+  for (int i = 0; i < 200; i++) { 
         int x = random(tft.width());
         int y = random(tft.height());
         tft.drawPixel(x, y, TFT_BLUE); 
@@ -261,7 +261,7 @@ void drawScreenObstructionTwo() {
         int y = random(tft.height());
         tft.drawPixel(x, y, TFT_BLUE); 
     }
-  for (int i = 0; i < 30; i++) { 
+  for (int i = 0; i < 35; i++) { 
         int x1 = random(tft.width());
         int y1 = random(tft.height());
         int x2 = random(tft.width());
