@@ -448,7 +448,7 @@ void loop() {
       ESP.restart();
     } else {
       tft.fillRect(15, lineHeight * 2 + 5, 100, 6, TFT_GREEN);
-      tft.fillRect(16, lineHeight * 2 + 5 + 1, progress, 4, TFT_BLUE);
+      tft.fillRect(16, lineHeight * 2 + 5 + 1, progress * 10, 4, TFT_BLUE);
     }
     redrawProgress = false;
   }
