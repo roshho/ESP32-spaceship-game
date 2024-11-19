@@ -12,6 +12,8 @@ There were also changes made for signaling to the player. If the player’s task
 
 In this project, we added extra functionality by adding some extra hardware. We implemented a toggle switch, and moved button functionality away from the buttons of the LILYGO TTGO ESP32 board buttons to external buttons. To set up the project such that it works, please following this fritzing diagram:
 
+![](https://i.ibb.co/98D61rx/bqXG0Tj.png)
+
 # Instructions for Setup
 
 To run this on your own, have at least 2 people take the code in espaceteam.ino, which is in the espaceteam folder, and upload it to an LILYGO TTGO ESP32 board via Arduino IDE. 
