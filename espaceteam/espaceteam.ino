@@ -437,7 +437,7 @@ void loop() {
 
     redrawCmdRecvd = false;
 
-    if (progress >= 100) {
+    if (progress >= 10) {
       tft.fillScreen(TFT_BLUE);
       tft.setTextSize(3);
       tft.setTextColor(TFT_WHITE, TFT_BLUE);
