@@ -44,10 +44,10 @@ volatile bool askExpired = false;
 hw_timer_t *askExpireTimer = NULL;
 int expireLength = 60;
 
-#define ARRAY_SIZE 4
-const String commandVerbs[ARRAY_SIZE] = {"Engage", "Jingle", "Press", "Play" };
-const String commandNounsFirst[ARRAY_SIZE] = {"Portal", "Flopper", "Blink", "Spot"};
-const String commandNounsSecond[ARRAY_SIZE] = {"pins", "nobs", "bells", "pops"};
+#define ARRAY_SIZE 10
+const String commandVerbs[ARRAY_SIZE] = {"Engage", "Jingle", "Press", "Play", "Tickle", "Randomize", "Flourish", "Jumpstart", "Pivot", "Tinker" };
+const String commandNounsFirst[ARRAY_SIZE] = {"Portal", "Flopper", "Blink", "Spot", "Cable", "Wire", "Flower", "Hyper", "Giga", "Mega"};
+const String commandNounsSecond[ARRAY_SIZE] = {"pins", "nobs", "bells", "pops", "spirals", "coils", "springs", "cogs", "screws", "bolts"};
 
 int lineHeight = 20;
 
