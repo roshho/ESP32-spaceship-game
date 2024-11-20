@@ -47,3 +47,5 @@ There were also changes made for signaling to the player. If the player’s task
 ## 📋 Instructions for Setup
 
 To run this on your own, have at least 2 people take the code in espaceteam.ino, which is in the espaceteam folder, and upload it to an LILYGO TTGO ESP32 board via Arduino IDE. Then, call out tasks to each other, while the other players fulfill those tasks!
+
+When the game is over, click the reset button on the sides of each players ESP32 and play until your heart desires a halt!
