@@ -42,12 +42,12 @@ volatile bool scheduleCmdAsk = true;
 hw_timer_t *askRequestTimer = NULL;
 volatile bool askExpired = false;
 hw_timer_t *askExpireTimer = NULL;
-int expireLength = 25;
+int expireLength = 35;
 
 #define ARRAY_SIZE 10
-const String commandVerbs[ARRAY_SIZE] = {"Engage", "Jingle", "Press", "Play" };
-const String commandNounsFirst[ARRAY_SIZE] = {"Portal", "Flopper", "Blink", "Spot"};
-const String commandNounsSecond[ARRAY_SIZE] = {"pins", "nobs", "bells", "pops"};
+const String commandVerbs[ARRAY_SIZE] = {"Engage", "Jingle", "Press", "Play", "Tickle", "Randomize", "Flourish", "Jumpstart", "Pivot", "Tinker" };
+const String commandNounsFirst[ARRAY_SIZE] = {"Portal", "Flopper", "Blink", "Spot", "Cable", "Wire", "Flower", "Hyper", "Giga", "Mega"};
+const String commandNounsSecond[ARRAY_SIZE] = {"pins", "nobs", "bells", "pops", "spirals", "coils", "springs", "cogs", "screws", "bolts"};
 
 int lineHeight = 20;
 
@@ -228,7 +228,7 @@ void textSetup() {
 
   tft.setTextSize(2);
   tft.fillScreen(TFT_BLACK);
-  tft.setTextColor(TFT_GREEN, TFT_BLACK);
+  tft.setTextColor(TFT_YELLOW, TFT_BLACK);
   drawControls();
 
   cmdRecvd = waitingCmd;
@@ -249,19 +249,19 @@ void timerSetup() {
 }
 
 void drawScreenObstructionOne() {
-  for (int i = 0; i < 20; i++) { 
+  for (int i = 0; i < 200; i++) { 
         int x = random(tft.width());
         int y = random(tft.height());
         tft.drawPixel(x, y, TFT_BLUE); 
     }
 }
 void drawScreenObstructionTwo() {
-  for (int i = 0; i < 25; i++) { 
+  for (int i = 0; i < 80; i++) { 
         int x = random(tft.width());
         int y = random(tft.height());
         tft.drawPixel(x, y, TFT_BLUE); 
     }
-  for (int i = 0; i < 7; i++) { 
+  for (int i = 0; i < 35; i++) { 
         int x1 = random(tft.width());
         int y1 = random(tft.height());
         int x2 = random(tft.width());
@@ -425,9 +425,19 @@ void loop() {
     tft.fillRect(0, 0, 135, 90, TFT_BLACK);
     tft.drawString(cmdRecvd.substring(0, cmdRecvd.indexOf(' ')), 3, 0, 2);
     tft.drawString(cmdRecvd.substring(cmdRecvd.indexOf(' ') + 1), 3, 0 + lineHeight, 2);
+
+      cmd3 = "Toggle " + cmd3.substring(cmd3.indexOf(' ') + 1);
+      tft.setTextSize(1);
+      tft.drawString("B1: " + cmd1.substring(0, cmd1.indexOf(' ')), 3, 90, 2);
+      tft.drawString(cmd1.substring(cmd1.indexOf(' ') + 1), 3, 90 + lineHeight, 2);
+      tft.drawString("B2: " + cmd2.substring(0, cmd2.indexOf(' ')), 3, 140, 2);
+      tft.drawString(cmd2.substring(cmd2.indexOf(' ') + 1), 3, 140 + lineHeight, 2);
+      tft.drawString("S: " + cmd3.substring(0, cmd3.indexOf(' ')), 3, 190, 2);
+      tft.drawString(cmd3.substring(cmd3.indexOf(' ') + 1), 3, 190 + lineHeight, 2);
+
     redrawCmdRecvd = false;
 
-    if (progress >= 100) {
+    if (progress >= 10) {
       tft.fillScreen(TFT_BLUE);
       tft.setTextSize(3);
       tft.setTextColor(TFT_WHITE, TFT_BLUE);
@@ -438,7 +448,7 @@ void loop() {
       ESP.restart();
     } else {
       tft.fillRect(15, lineHeight * 2 + 5, 100, 6, TFT_GREEN);
-      tft.fillRect(16, lineHeight * 2 + 5 + 1, progress, 4, TFT_BLUE);
+      tft.fillRect(16, lineHeight * 2 + 5 + 1, progress * 10, 4, TFT_BLUE);
     }
     redrawProgress = false;
   }
