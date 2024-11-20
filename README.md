@@ -11,6 +11,8 @@ In terms of design goals, we wanted to do a few different things:
 4. Add hardware and more tasks
 5. Change up the task names
 
+Video Demonstration URL: https://www.youtube.com/watch?v=HqaP0ez_a80
+
 <div style="display: flex;">
     <img src="media/failed.gif" width="300" style="margin-right: 10px;" />
     <img src="media/success.gif"width="300"/>
