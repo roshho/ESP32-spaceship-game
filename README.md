@@ -24,6 +24,8 @@ In this project, we added extra functionality by adding some extra hardware. We 
 
 ![](https://i.ibb.co/98D61rx/bqXG0Tj.png)
 
+<a href="url"><img src="https://github.com/huangs-nyc/module3-group/blob/main/diagrams/fritzing-breadboard.jpeg" height="500" width="250"></a>
+
 For gameplay: Button 1 is on the left, and Button 2 is on the right in this diagram.
 
 ## 🖥️ Software and UI Changes
