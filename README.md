@@ -22,8 +22,8 @@ Video Demonstration URL: https://www.youtube.com/watch?v=HqaP0ez_a80
 
 In this project, we added extra functionality by adding some extra hardware. We implemented a toggle switch, and moved button functionality away from the buttons of the LILYGO TTGO ESP32 board buttons to external buttons. To set up the project such that it works, please following this fritzing diagram:
 
-<img src="diagrams/fritzing-diagram.png"width="300"/>
-<img src="diagrams/fritzing-breadboard.jpeg"height="500"width="250"/>
+<img src="diagrams/fritzing-diagram.png" width="300" />
+<img src="diagrams/fritzing-breadboard.jpeg" height="500" width="250" />
 
 For gameplay: Button 1 is on the left, and Button 2 is on the right in this diagram.
 
