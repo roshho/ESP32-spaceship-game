@@ -22,3 +22,8 @@ In this project, we added extra functionality by adding some extra hardware. We 
 ## 📋 Instructions for Setup
 
 To run this on your own, have at least 2 people take the code in espaceteam.ino, which is in the espaceteam folder, and upload it to an LILYGO TTGO ESP32 board via Arduino IDE. 
+
+## 🤖 Optional 3D prints
+
+Under 3d-files folder, there consists an enclosure lid, enclosure base, and toggle switch cover to make the it easier to toggle the switch and press on the button with a more stable base. The decorative toggle switch cover was made to fit the switch and should friction fit over the toggle with the tight tolerances. 
+<img src="media/3d-models.gif"width="500"/>
