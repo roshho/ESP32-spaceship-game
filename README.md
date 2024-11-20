@@ -14,8 +14,8 @@ In terms of design goals, we wanted to do a few different things:
 Video Demonstration URL: https://www.youtube.com/watch?v=HqaP0ez_a80
 
 <div style="display: flex;">
-    <img src="media/failed.gif" width="300" style="margin-right: 10px;" />
-    <img src="media/success.gif"width="300"/>
+    <img src="media/failed.gif" width="400" style="margin-right: 10px;" />
+    <img src="media/success.gif"width="400"/>
 </div>
 
 ## ⚙️ Fritzing and Added Hardware
@@ -52,4 +52,4 @@ When the round is over, click the reset button on the sides of each players ESP3
 ## 🤖 Optional 3D prints
 
 Under 3d-files folder, there consists an enclosure lid, enclosure base, and toggle switch cover to make the it easier to toggle the switch and press on the button with a more stable base. The decorative toggle switch cover was made to fit the switch and should friction fit over the toggle with the tight tolerances. 
-<img src="media/3d-models.gif"width="500"/>
+<img src="media/3d-models.png" width="500"/>
