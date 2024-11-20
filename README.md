@@ -22,6 +22,8 @@ In this project, we added extra functionality by adding some extra hardware. We 
 
 ![](https://i.ibb.co/98D61rx/bqXG0Tj.png)
 
+For gameplay: Button 1 is on the left, and Button 2 is on the right in this diagram.
+
 ## 🖥️ Software and UI Changes
 
 Sensory input and testing:
@@ -36,4 +38,4 @@ There were also changes made for signaling to the player. If the player’s task
 
 ## 📋 Instructions for Setup
 
-To run this on your own, have at least 2 people take the code in espaceteam.ino, which is in the espaceteam folder, and upload it to an LILYGO TTGO ESP32 board via Arduino IDE. 
+To run this on your own, have at least 2 people take the code in espaceteam.ino, which is in the espaceteam folder, and upload it to an LILYGO TTGO ESP32 board via Arduino IDE. Then, call out tasks to each other, while the other players fulfill those tasks!
