@@ -22,7 +22,7 @@ Video Demonstration URL: https://www.youtube.com/watch?v=HqaP0ez_a80
 
 In this project, we added extra functionality by adding some extra hardware. We implemented a toggle switch, and moved button functionality away from the buttons of the LILYGO TTGO ESP32 board buttons to external buttons. To set up the project such that it works, please following this fritzing diagram:
 
-<img src="diagrams/fritzing-diagram.png" width="500" />
+<img src="media/fritzing-diagram.png" width="500" />
 <img src="diagrams/fritzing-breadboard.jpeg" height="250" width="500" />
 
 For gameplay: Button 1 is on the left, and Button 2 is on the right in this diagram.
@@ -52,4 +52,9 @@ When the round is over, click the reset button on the sides of each players ESP3
 ## 🤖 Optional 3D prints
 
 Under 3d-files folder, there consists an enclosure lid, enclosure base, and toggle switch cover to make the it easier to toggle the switch and press on the button with a more stable base. The decorative toggle switch cover was made to fit the switch and should friction fit over the toggle with the tight tolerances. 
-<img src="media/3d-models.png" width="500"/>
+<img src="media/3d-models.png" width="400"/>
+
+<div style="display: flex;">
+    <img src="media/3d-models.png" width="400" style="margin-right: 10px;" />
+    <img src="media/toggle-cover.jpg"width="400"/>
+</div>
