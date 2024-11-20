@@ -1,6 +1,10 @@
 # About
 
 This project took initial source code, and added functionality to it.
+<div style="display: flex;">
+    <img src="media/failed.gif" width="300" style="margin-right: 10px;" />
+    <img src="media/success.gif"width="300"/>
+</div>
 
 # Software and UI Changes
 
