@@ -1,7 +1,16 @@
 # 🚀 ESP Spaceteam 
 ##  👾 About
 Play spaceteam with your friends on ESPs! 
-This project took initial source code, and added functionality to it. 
+This project took initial source code, and added functionality to it. You can find the intial source code here: https://github.com/ttseng/COMS3930-Fall2024/tree/main/Module%203.
+The source code was a project that could be uploaded to an ESP32 LILYGO TTGO board. Then, with at least 2 players, one player could call out a task which could be fulfilled by another player pressing a button on that board.
+
+In terms of design goals, we wanted to do a few different things:
+1. Make the timer work
+2. Make timer signals
+3. Make task completion signals
+4. Add hardware and more tasks
+5. Change up the task names
+
 <div style="display: flex;">
     <img src="media/failed.gif" width="300" style="margin-right: 10px;" />
     <img src="media/success.gif"width="300"/>
