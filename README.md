@@ -38,6 +38,8 @@ Once you have this installed, connect your board to the Arduino IDE, and upload 
 
 In this project, we added extra software and UI changes from the original source code.  One of the major changes was the timer function, which now counts down from 40 seconds once a task is received. If the player gets their task completed, the timer will reset and the progress bar will increment by 1 out of 10 total. This progress bar was also changed from 100 in the original to 10. If they do not, then the game is over for them and they will have to restart with their progress bar back at 0.
 
+Addtionally, we added some much needed sweet chaos for the user as their time runs out. We implemented some screen obstructions to make the screen a bit harder to read. At 10 seconds left, we added randomized but populous blue dots to simulate the space craft window getting cloudy and lost in space. At 5 seconds left we added even more obstructions in the form of random yellow lines to simulate flying debris on the spaceship screen making the instructions not as visible. We hoped that this added functionality helps add a nice level of surprise and challenge
+
 There were also changes made for signaling to the player. If the player’s task is completed, then the border of the display will flash green to indicate that it was completed. There are also many time indicators. Once the user has run out of half their time, there will be moving red lines around the border. Then, as the timer runs out, the screen will fill with red dots and blue dots, before eventually going to a red “Game Over” screen if the timer fully runs out.
 
 ## 📋 Instructions for Setup
